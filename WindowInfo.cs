@@ -43,15 +43,10 @@ class WindowInfo
     [DllImport("user32.dll", SetLastError = true)]
     public static extern int GetClassName(IntPtr hWnd, System.Text.StringBuilder lpClassName, int nMaxCount);
 
-    [DllImport("user32.dll", ExactSpelling = true)]
-    public static extern IntPtr GetAncestor(IntPtr hwnd, GetAncestorFlags flags);
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
 
-    public enum GetAncestorFlags
-    {
-        GetParent = 1,
-        GetRoot = 2,
-        GetRootOwner = 3
-    }
+    private const uint GW_OWNER = 4;
 
     public static List<Window> GetOpenWindows()
     {
@@ -70,7 +65,7 @@ class WindowInfo
                 var window = new Window
                 {
                     Handle = hWnd,
-                    ParentHandle = GetAncestor(hWnd, GetAncestorFlags.GetParent),
+                    ParentHandle = GetWindow(hWnd, GW_OWNER),
                     Bounds = rect,
                     Title = title,
                     ClassName = GetWindowClassName(hWnd),
