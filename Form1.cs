@@ -4,10 +4,10 @@ namespace DesktopBlocks
 {
     public partial class Form1 : Form
     {
-        private List<MonitorInfo.MonitorInfoEx> monitors;
-        private List<WindowInfo.Window> windows;
+        private List<MonitorInfo.MonitorInfoEx> monitors = default!;
+        private List<WindowInfo.Window> windows = default!;
         private float zoomFactor = 1.0f;
-        private PointF zoomCenter = new PointF(0, 0);
+        private PointF zoomCenter = new(0, 0);
         private WindowInfo.Window? selectedWindow;
 
         public Form1()

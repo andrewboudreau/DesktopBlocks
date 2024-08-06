@@ -20,7 +20,7 @@ class WireframeRenderer
         {
             if (window.IsVisible)
             {
-                Pen windowPen = (window == selectedWindow) ? new Pen(Color.Blue, 3) : Pens.Blue;
+                Pen windowPen = (window == selectedWindow) ? new Pen(Color.Red, 3) : Pens.Blue;
                 g.DrawRectangle(windowPen, window.Bounds.Left, window.Bounds.Top, window.Bounds.Right - window.Bounds.Left, window.Bounds.Bottom - window.Bounds.Top);
                 string windowName = window.Title.Length > 30 ? window.Title.Substring(0, 30) : window.Title;
                 g.DrawString(windowName, SystemFonts.DefaultFont, Brushes.Black, window.Bounds.Left, window.Bounds.Top);
