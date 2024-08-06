@@ -18,9 +18,12 @@ class WireframeRenderer
         // Draw windows with window names
         foreach (var window in windows)
         {
-            g.DrawRectangle(Pens.Red, window.Bounds.Left, window.Bounds.Top, window.Bounds.Right - window.Bounds.Left, window.Bounds.Bottom - window.Bounds.Top);
-            string windowName = window.Title.Length > 30 ? window.Title.Substring(0, 30) : window.Title;
-            g.DrawString(windowName, SystemFonts.DefaultFont, Brushes.Black, window.Bounds.Left, window.Bounds.Top);
+            if (window.IsVisible)
+            {
+                g.DrawRectangle(Pens.Red, window.Bounds.Left, window.Bounds.Top, window.Bounds.Right - window.Bounds.Left, window.Bounds.Bottom - window.Bounds.Top);
+                string windowName = window.Title.Length > 30 ? window.Title.Substring(0, 30) : window.Title;
+                g.DrawString(windowName, SystemFonts.DefaultFont, Brushes.Black, window.Bounds.Left, window.Bounds.Top);
+            }
         }
     }
 }

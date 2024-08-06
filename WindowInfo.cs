@@ -19,7 +19,12 @@ class WindowInfo
         public Rect Bounds { get; set; }
         public required string Title { get; set; }
         public required string ClassName { get; set; }
+        public bool IsVisible { get; set; }
     }
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsWindowVisible(IntPtr hWnd);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -49,7 +54,8 @@ class WindowInfo
                     Handle = hWnd,
                     Bounds = rect,
                     Title = GetWindowTitle(hWnd),
-                    ClassName = GetWindowClassName(hWnd)
+                    ClassName = GetWindowClassName(hWnd),
+                    IsVisible = IsWindowVisible(hWnd)
                 };
                 windows.Add(window);
             }
