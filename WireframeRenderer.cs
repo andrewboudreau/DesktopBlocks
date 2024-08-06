@@ -15,13 +15,12 @@ class WireframeRenderer
             g.DrawRectangle(Pens.Blue, monitor.Monitor.Left, monitor.Monitor.Top, monitor.Monitor.Right - monitor.Monitor.Left, monitor.Monitor.Bottom - monitor.Monitor.Top);
         }
 
-        // Draw windows with z-order
-        int zIndex = 0;
+        // Draw windows with window names
         foreach (var window in windows)
         {
             g.DrawRectangle(Pens.Red, window.Bounds.Left, window.Bounds.Top, window.Bounds.Right - window.Bounds.Left, window.Bounds.Bottom - window.Bounds.Top);
-            g.DrawString(zIndex.ToString(), SystemFonts.DefaultFont, Brushes.Black, window.Bounds.Left, window.Bounds.Top);
-            zIndex++;
+            string windowName = window.Title.Length > 30 ? window.Title.Substring(0, 30) : window.Title;
+            g.DrawString(windowName, SystemFonts.DefaultFont, Brushes.Black, window.Bounds.Left, window.Bounds.Top);
         }
     }
 }
