@@ -4,7 +4,7 @@ namespace DesktopBlocks;
 
 class WireframeRenderer
 {
-    public static void RenderWireframe(List<MonitorInfo.MonitorInfoEx> monitors, List<WindowInfo.Window> windows, Graphics g, int width, int height)
+    public static void RenderWireframe(List<MonitorInfo.MonitorInfoEx> monitors, List<WindowInfo.Window> windows, Graphics g, int width, int height, WindowInfo.Window? selectedWindow)
     {
         g.Clear(Color.White);
         g.DrawRectangle(Pens.Blue, 10, 10, 50, 50);
@@ -20,7 +20,8 @@ class WireframeRenderer
         {
             if (window.IsVisible)
             {
-                g.DrawRectangle(Pens.Red, window.Bounds.Left, window.Bounds.Top, window.Bounds.Right - window.Bounds.Left, window.Bounds.Bottom - window.Bounds.Top);
+                Pen windowPen = (window == selectedWindow) ? new Pen(Color.Blue, 3) : Pens.Blue;
+                g.DrawRectangle(windowPen, window.Bounds.Left, window.Bounds.Top, window.Bounds.Right - window.Bounds.Left, window.Bounds.Bottom - window.Bounds.Top);
                 string windowName = window.Title.Length > 30 ? window.Title.Substring(0, 30) : window.Title;
                 g.DrawString(windowName, SystemFonts.DefaultFont, Brushes.Black, window.Bounds.Left, window.Bounds.Top);
             }

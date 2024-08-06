@@ -8,6 +8,7 @@ namespace DesktopBlocks
         private List<WindowInfo.Window> windows;
         private float zoomFactor = 1.0f;
         private PointF zoomCenter = new PointF(0, 0);
+        private WindowInfo.Window? selectedWindow;
 
         public Form1()
         {
@@ -17,13 +18,57 @@ namespace DesktopBlocks
             pictureBox1.DoubleClick += Draw;
             Resize += Form1_Resize;
             pictureBox1.MouseClick += PictureBox1_MouseClick;
+            InitializeWindowTable();
+        }
+
+        private void InitializeWindowTable()
+        {
+            DataGridView windowTable = new DataGridView
+            {
+                Dock = DockStyle.Bottom,
+                Height = 200,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+            };
+            windowTable.Columns.Add("Title", "Window Name");
+            windowTable.Columns.Add("X", "X");
+            windowTable.Columns.Add("Y", "Y");
+            windowTable.Columns.Add("ZIndex", "Z-Index");
+            windowTable.SelectionChanged += WindowTable_SelectionChanged;
+            Controls.Add(windowTable);
+        }
+
+        private void WindowTable_SelectionChanged(object? sender, EventArgs e)
+        {
+            if (sender is DataGridView dgv && dgv.SelectedRows.Count > 0)
+            {
+                int selectedIndex = dgv.SelectedRows[0].Index;
+                selectedWindow = windows[selectedIndex];
+                RenderScaledWireframe();
+            }
         }
 
         private void Draw(object? sender, EventArgs e)
         {
             monitors = MonitorInfo.GetMonitors();
             windows = WindowInfo.GetOpenWindows();
+            for (int i = 0; i < windows.Count; i++)
+            {
+                windows[i].ZIndex = i;
+            }
+            UpdateWindowTable();
             RenderScaledWireframe();
+        }
+
+        private void UpdateWindowTable()
+        {
+            if (Controls.OfType<DataGridView>().FirstOrDefault() is DataGridView windowTable)
+            {
+                windowTable.Rows.Clear();
+                foreach (var window in windows.Where(w => w.IsVisible))
+                {
+                    windowTable.Rows.Add(window.Title, window.Bounds.Left, window.Bounds.Top, window.ZIndex);
+                }
+            }
         }
 
         private void Form1_Resize(object? sender, EventArgs e)
@@ -64,7 +109,7 @@ namespace DesktopBlocks
                 g.ScaleTransform(scaleFactor, scaleFactor);
                 g.TranslateTransform(-zoomCenter.X / baseScaleFactor, -zoomCenter.Y / baseScaleFactor);
 
-                WireframeRenderer.RenderWireframe(monitors, windows, g, totalWidth, totalHeight);
+                WireframeRenderer.RenderWireframe(monitors, windows, g, totalWidth, totalHeight, selectedWindow);
             }
 
             pictureBox1.Image = scaledBitmap;

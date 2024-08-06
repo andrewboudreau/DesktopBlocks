@@ -20,6 +20,7 @@ class WindowInfo
         public required string Title { get; set; }
         public required string ClassName { get; set; }
         public bool IsVisible { get; set; }
+        public int ZIndex { get; set; }
     }
 
     [DllImport("user32.dll")]
