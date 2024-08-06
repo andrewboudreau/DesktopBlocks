@@ -50,7 +50,7 @@ class WindowInfo
 
     public static List<Window> GetOpenWindows()
     {
-        List<Window> windows = [];
+        List<Window> windows = new List<Window>();
         EnumWindows((hWnd, lParam) =>
         {
             Rect rect;
