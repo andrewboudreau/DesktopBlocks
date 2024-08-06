@@ -27,12 +27,15 @@ namespace DesktopBlocks
             {
                 Dock = DockStyle.Bottom,
                 Height = 200,
-                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                AllowUserToAddRows = false,
+                AllowUserToDeleteRows = false,
             };
             windowTable.Columns.Add("Title", "Window Name");
             windowTable.Columns.Add("X", "X");
             windowTable.Columns.Add("Y", "Y");
             windowTable.Columns.Add("ZIndex", "Z-Index");
+            windowTable.Columns.Add("Parent", "Parent Window");
             windowTable.SelectionChanged += WindowTable_SelectionChanged;
             Controls.Add(windowTable);
         }
@@ -66,7 +69,8 @@ namespace DesktopBlocks
                 windowTable.Rows.Clear();
                 foreach (var window in windows.Where(w => w.IsVisible))
                 {
-                    windowTable.Rows.Add(window.Title, window.Bounds.Left, window.Bounds.Top, window.ZIndex);
+                    string parentTitle = windows.FirstOrDefault(w => w.Handle == window.ParentHandle)?.Title ?? "None";
+                    windowTable.Rows.Add(window.Title, window.Bounds.Left, window.Bounds.Top, window.ZIndex, parentTitle);
                 }
             }
         }

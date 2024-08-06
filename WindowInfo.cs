@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace DesktopBlocks;
 
@@ -38,10 +39,10 @@ class WindowInfo
     public static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
 
     [DllImport("user32.dll", SetLastError = true)]
-    public static extern int GetWindowText(IntPtr hWnd, System.Text.StringBuilder lpString, int nMaxCount);
+    public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
     [DllImport("user32.dll", SetLastError = true)]
-    public static extern int GetClassName(IntPtr hWnd, System.Text.StringBuilder lpClassName, int nMaxCount);
+    public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
     [DllImport("user32.dll")]
     public static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
@@ -50,11 +51,10 @@ class WindowInfo
 
     public static List<Window> GetOpenWindows()
     {
-        List<Window> windows = new List<Window>();
+        List<Window> windows = [];
         EnumWindows((hWnd, lParam) =>
         {
-            Rect rect;
-            if (GetWindowRect(hWnd, out rect))
+            if (GetWindowRect(hWnd, out Rect rect))
             {
                 string title = GetWindowTitle(hWnd);
                 bool isVisible = IsWindowVisible(hWnd) &&
@@ -81,14 +81,14 @@ class WindowInfo
 
     private static string GetWindowTitle(IntPtr hWnd)
     {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder(256);
+        StringBuilder sb = new(256);
         GetWindowText(hWnd, sb, sb.Capacity);
         return sb.ToString();
     }
 
     private static string GetWindowClassName(IntPtr hWnd)
     {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder(256);
+        StringBuilder sb = new(256);
         GetClassName(hWnd, sb, sb.Capacity);
         return sb.ToString();
     }
