@@ -21,6 +21,25 @@ namespace DesktopBlocks
             InitializeWindowTable();
         }
 
+        private void ResetZoom_Click(object sender, EventArgs e)
+        {
+            zoomFactor = 1.0f;
+            zoomCenter = new PointF(pictureBox1.Width / 2, pictureBox1.Height / 2);
+            RenderScaledWireframe();
+        }
+
+        private void ZoomIn_Click(object sender, EventArgs e)
+        {
+            zoomFactor *= 1.2f;
+            RenderScaledWireframe();
+        }
+
+        private void ZoomOut_Click(object sender, EventArgs e)
+        {
+            zoomFactor /= 1.2f;
+            RenderScaledWireframe();
+        }
+
         private void InitializeWindowTable()
         {
             DataGridView windowTable = new DataGridView
