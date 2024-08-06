@@ -16,6 +16,7 @@ class WindowInfo
     public class Window
     {
         public IntPtr Handle { get; set; }
+        public IntPtr ParentHandle { get; set; }
         public Rect Bounds { get; set; }
         public required string Title { get; set; }
         public required string ClassName { get; set; }
@@ -42,6 +43,16 @@ class WindowInfo
     [DllImport("user32.dll", SetLastError = true)]
     public static extern int GetClassName(IntPtr hWnd, System.Text.StringBuilder lpClassName, int nMaxCount);
 
+    [DllImport("user32.dll", ExactSpelling = true)]
+    public static extern IntPtr GetAncestor(IntPtr hwnd, GetAncestorFlags flags);
+
+    public enum GetAncestorFlags
+    {
+        GetParent = 1,
+        GetRoot = 2,
+        GetRootOwner = 3
+    }
+
     public static List<Window> GetOpenWindows()
     {
         List<Window> windows = [];
@@ -59,6 +70,7 @@ class WindowInfo
                 var window = new Window
                 {
                     Handle = hWnd,
+                    ParentHandle = GetAncestor(hWnd, GetAncestorFlags.GetParent),
                     Bounds = rect,
                     Title = title,
                     ClassName = GetWindowClassName(hWnd),
