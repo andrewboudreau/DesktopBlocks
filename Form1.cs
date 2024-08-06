@@ -17,7 +17,6 @@ namespace DesktopBlocks
             DoubleClick += Draw;
             pictureBox1.DoubleClick += Draw;
             Resize += Form1_Resize;
-            pictureBox1.MouseClick += PictureBox1_MouseClick;
             InitializeWindowTable();
         }
 
@@ -102,20 +101,6 @@ namespace DesktopBlocks
             }
         }
 
-        private void PictureBox1_MouseClick(object? sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                zoomFactor *= 1.2f;
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                zoomFactor /= 1.2f;
-            }
-
-            zoomCenter = new PointF(e.X, e.Y);
-            RenderScaledWireframe();
-        }
 
         private void RenderScaledWireframe()
         {
