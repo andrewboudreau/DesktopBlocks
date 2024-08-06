@@ -50,13 +50,19 @@ class WindowInfo
             Rect rect;
             if (GetWindowRect(hWnd, out rect))
             {
+                string title = GetWindowTitle(hWnd);
+                bool isVisible = IsWindowVisible(hWnd) &&
+                                 rect.Right - rect.Left > 0 &&
+                                 rect.Bottom - rect.Top > 0 &&
+                                 !string.IsNullOrWhiteSpace(title);
+
                 var window = new Window
                 {
                     Handle = hWnd,
                     Bounds = rect,
-                    Title = GetWindowTitle(hWnd),
+                    Title = title,
                     ClassName = GetWindowClassName(hWnd),
-                    IsVisible = IsWindowVisible(hWnd)
+                    IsVisible = isVisible
                 };
                 windows.Add(window);
             }
