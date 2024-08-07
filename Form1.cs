@@ -1,5 +1,3 @@
-using System.Drawing.Drawing2D;
-
 namespace DesktopBlocks
 {
     public partial class Form1 : Form
@@ -41,19 +39,20 @@ namespace DesktopBlocks
 
         private void InitializeWindowTable()
         {
-            DataGridView windowTable = new DataGridView
+            DataGridView windowTable = new()
             {
                 Dock = DockStyle.Bottom,
                 Height = 200,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
                 AllowUserToAddRows = false,
                 AllowUserToDeleteRows = false,
+                ReadOnly = true
             };
             windowTable.Columns.Add("Title", "Window Name");
             windowTable.Columns.Add("X", "X");
             windowTable.Columns.Add("Y", "Y");
             windowTable.Columns.Add("ZIndex", "Z-Index");
-            windowTable.Columns.Add("Parent", "Parent Window");
+            windowTable.Columns.Add("ClassName", "ClassName");
             windowTable.SelectionChanged += WindowTable_SelectionChanged;
             Controls.Add(windowTable);
         }
@@ -88,7 +87,7 @@ namespace DesktopBlocks
                 foreach (var window in windows.Where(w => w.IsVisible))
                 {
                     string parentTitle = windows.FirstOrDefault(w => w.Handle == window.ParentHandle)?.Title ?? "None";
-                    windowTable.Rows.Add(window.Title, window.Bounds.Left, window.Bounds.Top, window.ZIndex, parentTitle);
+                    windowTable.Rows.Add(window.Title, window.Bounds.Left, window.Bounds.Top, window.ZIndex, window.ClassName);
                 }
             }
         }
